@@ -1,6 +1,5 @@
 from flask import Flask
 from system import System
-from scim import NotImplemented
 
 app = Flask(__name__)
 
@@ -11,5 +10,5 @@ def hello_world():
         x = System()
         x.get_me()
         return "hello"
-    except NotImplemented as err:
+    except NotImplementedError as err:
         return repr(err)
