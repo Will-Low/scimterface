@@ -1,4 +1,11 @@
-class System:
+# TODO - See if the methods for this class can be created on the fly
+# based on a dict of endpoints to methods
+
+
+class SCIMSystem():
+    def __init__(self):
+        self.name = NotImplementedError("No name set")
+
     def _create_error_text(self, method: str, endpoint: str) -> str:
         return f"The {method} method is not implemented for {endpoint}"
 
@@ -45,19 +52,19 @@ class System:
         raise NotImplementedError(self._create_error_text("PATCH", "/Me"))
 
     def delete_me(self):
-        raise NotImplementedError(self._create_error_text("DELETE", "/Me"))
+        raise NotImplementedError("DELETE", "/Me")
 
     def get_service_provider_config(self):
-        raise NotImplementedError(self._create_error_text("GET", "/ServiceProviderConfig"))
+        raise NotImplementedError("GET", "/ServiceProviderConfig")
 
     def get_resource_types(self):
-        raise NotImplementedError(self._create_error_text("GET", "/ResourceTypes"))
+        raise NotImplementedError("GET", "/ResourceTypes")
 
     def get_schemas(self):
-        raise NotImplementedError(self._create_error_text("GET", "/Schemas"))
+        raise NotImplementedError("GET", "/Schemas")
 
     def post_bulk(self):
-        raise NotImplementedError(self._create_error_text("POST", "/Bulk"))
+        raise NotImplementedError("POST", "/Bulk")
 
     def post_search(self):
-        raise NotImplementedError(self._create_error_text("POST", "/.search"))
+        raise NotImplementedError("POST", "/.search")
