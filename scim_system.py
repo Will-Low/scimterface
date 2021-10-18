@@ -2,7 +2,7 @@
 # based on a dict of endpoints to methods
 
 
-class SCIMSystem():
+class SCIMSystem:
     def __init__(self):
         self.name = NotImplementedError("No name set")
 
