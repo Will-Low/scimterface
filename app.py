@@ -1,4 +1,4 @@
-from flask import abort, Flask
+from flask import abort, Flask, request
 
 import importlib.util
 import inspect
@@ -10,10 +10,6 @@ import sys
 from scim_system import SCIMSystem
 
 app = Flask(__name__)
-
-
-# For each system file, check to see if a class exists that is a subclass
-# If so, make it available for call via the "scim_endpoint" function
 
 
 def get_system_file(system_name: str) -> str:
@@ -55,7 +51,10 @@ def scim_endpoint(system_name: str, endpoint: str):
     module_name = load_module(system_name)
     target_subclass = get_system_subclass(module_name)
     inst = target_subclass()
-    return inst.get_groups()
+    try:
+        return call_method_and_endpoint_on_obj(request.method, endpoint, inst)
+    except AttributeError as err:
+        abort(404)
 
 
 def check_system_name_exists(system_name: str):
@@ -71,6 +70,21 @@ def get_system_files() -> list[str]:
     system_dir = cwd + "/systems"
     system_files = [f for f in glob.glob(system_dir + "/*.py")]
     return system_files
+
+
+def call_method_and_endpoint_on_obj(method: str, endpoint: str, scim_system_obj):
+    method = get_method(method)
+    endpoint = get_endpoint(endpoint)
+    function_method_to_call = getattr(scim_system_obj, f"{method}_{endpoint}")
+    return function_method_to_call()
+
+
+def get_method(method: str) -> str:
+    return method.lower()
+
+
+def get_endpoint(endpoint: str) -> str:
+    return endpoint.strip("/").lower()
 
 
 if __name__ == "__main__":

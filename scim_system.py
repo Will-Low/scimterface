@@ -3,9 +3,6 @@
 
 
 class SCIMSystem:
-    def __init__(self):
-        self.name = NotImplementedError("No name set")
-
     def _create_error_text(self, method: str, endpoint: str) -> str:
         return f"The {method} method is not implemented for {endpoint}"
 
