@@ -42,7 +42,7 @@ class SystemSubclassMissing(Exception):
 
 
 def get_system_subclass(module_name: str):
-    """Does the file contain a subclass of System?"""
+    """Checks if the named module contains a subclass of SCIMSystem"""
     module = sys.modules[module_name]
     for _, obj in inspect.getmembers(module):
         if not inspect.isclass(obj):
