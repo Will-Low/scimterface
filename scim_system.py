@@ -1,67 +1,92 @@
-# TODO - See if the methods for this class can be created on the fly
-# based on a dict of endpoints to methods
+"""Holds the base class for the SCIM system"""
+
+
+def _create_error_text(method: str, endpoint: str) -> str:
+    return f"The {method} method is not implemented for {endpoint}"
 
 
 class SCIMSystem:
-    def _create_error_text(self, method: str, endpoint: str) -> str:
-        return f"The {method} method is not implemented for {endpoint}"
+    """Represents a system behind the SCIM 2.0 interface.
+    Methods are named according to to RFC7644 section 3.2 and follow the pattern:
+    <HTTP method>_<SCIM endpoint>
+    """
 
     def get_users(self):
-        raise NotImplementedError(self._create_error_text("GET", "/Users"))
+        """GET /Users"""
+        raise NotImplementedError(_create_error_text("GET", "/Users"))
 
     def post_users(self):
-        raise NotImplementedError(self._create_error_text("POST", "/Users"))
+        """POST /Users"""
+        raise NotImplementedError(_create_error_text("POST", "/Users"))
 
     def put_users(self):
-        raise NotImplementedError(self._create_error_text("PUT", "/Users"))
+        """PUT /Users"""
+        raise NotImplementedError(_create_error_text("PUT", "/Users"))
 
     def patch_users(self):
-        raise NotImplementedError(self._create_error_text("PATCH", "/Users"))
+        """PATCH /Users"""
+        raise NotImplementedError(_create_error_text("PATCH", "/Users"))
 
     def delete_users(self):
-        raise NotImplementedError(self._create_error_text("DELETE", "/Users"))
+        """DELETE /Users"""
+        raise NotImplementedError(_create_error_text("DELETE", "/Users"))
 
     def get_groups(self):
-        raise NotImplementedError(self._create_error_text("GET", "/Groups"))
+        """GET /Groups"""
+        raise NotImplementedError(_create_error_text("GET", "/Groups"))
 
     def post_groups(self):
-        raise NotImplementedError(self._create_error_text("POST", "/Groups"))
+        """POST /Groups"""
+        raise NotImplementedError(_create_error_text("POST", "/Groups"))
 
     def put_groups(self):
-        raise NotImplementedError(self._create_error_text("PUT", "/Groups"))
+        """PUT /Groups"""
+        raise NotImplementedError(_create_error_text("PUT", "/Groups"))
 
     def patch_groups(self):
-        raise NotImplementedError(self._create_error_text("PATCH", "/Groups"))
+        """PATCH /Groups"""
+        raise NotImplementedError(_create_error_text("PATCH", "/Groups"))
 
     def delete_groups(self):
-        raise NotImplementedError(self._create_error_text("DELETE", "/Groups"))
+        """DELETE /Groups"""
+        raise NotImplementedError(_create_error_text("DELETE", "/Groups"))
 
     def get_me(self):
-        raise NotImplementedError(self._create_error_text("GET", "/Me"))
+        """GET /Me"""
+        raise NotImplementedError(_create_error_text("GET", "/Me"))
 
     def post_me(self):
-        raise NotImplementedError(self._create_error_text("POST", "/Me"))
+        """POST /Me"""
+        raise NotImplementedError(_create_error_text("POST", "/Me"))
 
     def put_me(self):
-        raise NotImplementedError(self._create_error_text("PUT", "/Me"))
+        """PUT /Me"""
+        raise NotImplementedError(_create_error_text("PUT", "/Me"))
 
     def patch_me(self):
-        raise NotImplementedError(self._create_error_text("PATCH", "/Me"))
+        """PATCH /Me"""
+        raise NotImplementedError(_create_error_text("PATCH", "/Me"))
 
     def delete_me(self):
+        """DELETE /Me"""
         raise NotImplementedError("DELETE", "/Me")
 
     def get_service_provider_config(self):
+        """GET /ServiceProviderConfig"""
         raise NotImplementedError("GET", "/ServiceProviderConfig")
 
     def get_resource_types(self):
+        """GET /ResourceTypes"""
         raise NotImplementedError("GET", "/ResourceTypes")
 
     def get_schemas(self):
+        """GET /Schemas"""
         raise NotImplementedError("GET", "/Schemas")
 
     def post_bulk(self):
+        """POST /Bulk"""
         raise NotImplementedError("POST", "/Bulk")
 
     def post_search(self):
+        """POST /.search"""
         raise NotImplementedError("POST", "/.search")
