@@ -55,7 +55,8 @@ def get_system_subclass(module_name: str):
 @app.route("/<string:system_name>/<string:endpoint>")
 def scim_endpoint(system_name: str, endpoint: str):
     """Represents all SCIM endpoints, with a system-name prefix"""
-    check_system_name_exists(system_name)
+    if not system_name_exists(system_name):
+        abort(404)
     module_name = load_module(system_name)
     target_subclass = get_system_subclass(module_name)
     inst = target_subclass()
@@ -63,14 +64,17 @@ def scim_endpoint(system_name: str, endpoint: str):
         return call_method_and_endpoint_on_obj(request.method, endpoint, inst)
     except AttributeError:
         abort(404)
+    except NotImplemented:
+        abort(501)
 
 
-def check_system_name_exists(system_name: str):
+def system_name_exists(system_name: str) -> bool:
     """Confirm a file for the system name exists"""
     system_files = get_system_files()
     file_name_stems = [Path(f).stem for f in system_files]
     if system_name not in file_name_stems:
-        abort(404)
+        return False
+    return True
 
 
 def get_system_files() -> List[str]:
