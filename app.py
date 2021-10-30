@@ -44,12 +44,14 @@ class SystemSubclassMissing(Exception):
 def get_system_subclass(module_name: str):
     """Checks if the named module contains a subclass of SCIMSystem"""
     module = sys.modules[module_name]
-    for _, obj in inspect.getmembers(module):
-        if not inspect.isclass(obj):
+    for _, module_member in inspect.getmembers(module):
+        if not inspect.isclass(module_member):
             continue
-        if issubclass(obj, SCIMSystem):
-            return obj
-        raise SystemSubclassMissing(module_name)
+        if module_member == SCIMSystem:
+            continue
+        if issubclass(module_member, SCIMSystem):
+            return module_member
+    raise SystemSubclassMissing(module_name)
 
 
 @app.route("/<string:system_name>/<string:endpoint>")
