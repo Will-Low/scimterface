@@ -1,3 +1,4 @@
+from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from enum import Enum
 from typing import Any, List, Dict, Union
@@ -70,22 +71,24 @@ class SCIMViolation(Exception):
 
 
 class SchemaAttribute:
-    """Defined in https://datatracker.ietf.org/doc/html/rfc7643#section-7"""
+    """Defined in https://datatracker.ietf.org/doc/html/rfc7643#section-7
+    Default values defined in RFC 7643 § 2.2
+    """
 
     def __init__(
         self,
         *,
         name: str,
-        type: AttributeType,
+        type: AttributeType = AttributeType.STRING,
         sub_attributes: List["SchemaAttribute"] = None,  # Only if "type" == "complex"
         multi_valued: bool,
         description: str,
-        required: bool,
-        canonical_values: None,
-        case_exact=bool,
-        mutability: Mutability,
-        returned: Returned,
-        uniqueness: Uniqueness,
+        required: bool = False,
+        canonical_values: List[str] = None,
+        case_exact: bool = False,
+        mutability: Mutability = Mutability.READ_WRITE,
+        returned: Returned = Returned.DEFAULT,
+        uniqueness: Uniqueness = Uniqueness.NONE,
         reference_types: ReferenceTypes,  # Only if "type" == "reference"
     ):
 
@@ -118,7 +121,24 @@ class SchemaAttribute:
             )
 
 
-class Schema:
+class SCIMSchema(ABC):
+    """An abstract representation of a SCIM schema. Not to be confused with the "Schema" resource."""
+
+    def __init__(
+        self, *, id: str, name: str, description: str, attributes: List[SchemaAttribute]
+    ):
+        self.id = id
+        self.name = name
+        self.description = description
+        self.attributes = attributes
+
+    @abstractmethod
+    def dumps(self):
+        """Returns a JSON-serializable representation of the schema."""
+        pass
+
+
+class Schema(SCIMSchema):
     """Defined in https://datatracker.ietf.org/doc/html/rfc7643#section-7"""
 
     _SCHEMA_ATTRIBUTES = [
@@ -451,18 +471,11 @@ class Schema:
         ),
     ]
 
-    def __init__(
-        self,
-        *,
-        id: Union[int, str] = "urn:ietf:params:scim:schemas:core:2.0:Schema",
-        name: str = "Schema",
-        description: str = "Specifies the schema that describes a SCIM schema",
-        attributes: List[SchemaAttribute] = _SCHEMA_ATTRIBUTES,
-    ):
-        self.id = id
-        self.name = name
-        self.description = description
-        self.attributes = attributes
+    def __init__(self):
+        self.id = "urn:ietf:params:scim:schemas:core:2.0:Schema"
+        self.name = "Schema"
+        self.description = "Specifies the schema that describes a SCIM schema"
+        self.attributes = self._SCHEMA_ATTRIBUTES
 
 
 class User(Schema):
@@ -490,9 +503,55 @@ class User(Schema):
         phone_numbers: List[str] = None,
         ims: List[str] = None,
         photos: List[str] = None,
+        addresses: List[str] = None,
+        groups: List[str] = None,
+        entitlements: List[str] = None,
+        roles: List[str] = None,
+        x509_certificates: List[str] = None,
     ):
         self.id = "urn:ietf:params:scim:schemas:core:2.0:User"
         self.name = "User"
-        self.user_name = user_name
         self.description = "User Account"
         self.endpoint = "/Users"
+
+        self.user_name = user_name
+        self.formatted = formatted
+        self.family_name = family_name
+        self.given_name = given_name
+        self.middle_name = middle_name
+        self.honorific_prefix = honorific_prefix
+        self.honorific_suffix = honorific_suffix
+        self.display_name = display_name
+        self.nick_name = nick_name
+        self.profile_url = profile_url
+        self.title = title
+        self.userType = userType
+        self.preferred_language = preferred_language
+        self.locale = locale
+        self.timezone = timezone
+        self.active = active
+        self.password = password
+        self.emails = emails
+        self.phone_numbers = phone_numbers
+        self.ims = ims
+        self.photos = photos
+        self.addresses = addresses
+        self.groups = groups
+        self.entitlements = entitlements
+        self.roles = roles
+        self.x509_certificates = x509_certificates
+
+class Group(Schema):
+    def __init__(
+        self,
+        *,
+        display_name: str,
+        members: List[str] = None,
+    ):
+        self.id = "urn:ietf:params:scim:schemas:core:2.0:Group"
+        self.name = "Group"
+        self.description = "Group"
+        self.endpoint = "/Groups"
+
+        self.display_name = display_name
+        self.members = members
