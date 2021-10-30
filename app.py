@@ -66,7 +66,7 @@ def scim_endpoint(system_name: str, endpoint: str):
         return call_method_and_endpoint_on_obj(request.method, endpoint, inst)
     except AttributeError:
         abort(404)
-    except NotImplemented:
+    except NotImplementedError:
         abort(501)
 
 
