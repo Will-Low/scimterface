@@ -109,13 +109,13 @@ class SchemaAttribute:
         self._throw_exception_on_sub_attributes_but_not_complex_type()
 
     def _warn_on_complex_type_missing_sub_attributes(self):
-        if self.attribute_type == AttributeType.COMPLEX and self.sub_attributes == None:
+        if self.type == AttributeType.COMPLEX and self.sub_attributes == None:
             warn(
                 f'Attribute "{self.name}" has the type "complex", but is missing sub-attributes. This is recommended per RFC 7643 § 7.'
             )
 
     def _throw_exception_on_sub_attributes_but_not_complex_type(self):
-        if self.attribute_type != AttributeType.COMPLEX and self.sub_attributes != None:
+        if self.type != AttributeType.COMPLEX and self.sub_attributes != None:
             raise SCIMViolation(
                 f'Attribute "{self.name}" has sub-attributes, but is not of type "complex"'
             )
