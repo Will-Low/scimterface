@@ -121,7 +121,7 @@ class SchemaAttribute:
             )
 
 
-class SCIMSchema(ABC):
+class SCIMSchema:
     """An abstract representation of a SCIM schema. Not to be confused with the "Schema" resource."""
 
     def __init__(
@@ -132,7 +132,6 @@ class SCIMSchema(ABC):
         self.description = description
         self.attributes = attributes
 
-    @abstractmethod
     def dumps(self):
         """Returns a JSON-serializable representation of the schema."""
         pass
