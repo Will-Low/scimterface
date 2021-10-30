@@ -89,7 +89,7 @@ class SchemaAttribute:
         mutability: Mutability = Mutability.READ_WRITE,
         returned: Returned = Returned.DEFAULT,
         uniqueness: Uniqueness = Uniqueness.NONE,
-        reference_types: ReferenceTypes,  # Only if "type" == "reference"
+        reference_types: ReferenceTypes = None,  # Only if "type" == "reference"
     ):
 
         self.name = name
@@ -540,6 +540,26 @@ class User(Schema):
         self.entitlements = entitlements
         self.roles = roles
         self.x509_certificates = x509_certificates
+
+
+class Manager:
+    def __init__(self, *, value: str, ref: str, display_name: str):
+        self.value = value
+        self.ref = ref
+        self.display_name = display_name
+
+
+# class EnterpriseUser(Schema):
+#     def __init__(
+#         self,
+#         *,
+#         employee_number: str,
+#         cost_center: str,
+#         organization: str,
+#         division: str,
+#         department: str,
+#         manager: Dict[str, str]
+
 
 class Group(Schema):
     def __init__(
