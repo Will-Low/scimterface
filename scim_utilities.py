@@ -539,8 +539,8 @@ class User(Schema):
         self.roles = roles
         self.x509_certificates = x509_certificates
 
-    def dump_obj(self):
-        return json.dumps(self.__dict__)  
+    def json_encode(self):
+        return self.__dict__
 
 
 class Manager:
