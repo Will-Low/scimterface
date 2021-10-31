@@ -1,6 +1,5 @@
-from abc import ABC, abstractmethod
-from dataclasses import dataclass
 from enum import Enum
+import json
 from typing import Any, List, Dict, Union
 from warnings import warn
 
@@ -132,7 +131,7 @@ class SCIMSchema:
         self.description = description
         self.attributes = attributes
 
-    def dumps(self):
+    def dump_obj(self):
         """Returns a JSON-serializable representation of the schema."""
         pass
 
@@ -539,6 +538,9 @@ class User(Schema):
         self.entitlements = entitlements
         self.roles = roles
         self.x509_certificates = x509_certificates
+
+    def dump_obj(self):
+        return json.dumps(self.__dict__)  
 
 
 class Manager:
