@@ -1,5 +1,6 @@
 from enum import Enum
 import json
+import re
 from typing import Any, List, Dict, Union
 from warnings import warn
 
@@ -476,10 +477,16 @@ class Schema(SCIMSchema):
         self.attributes = self._SCHEMA_ATTRIBUTES
 
 
-class User(Schema):
+def to_camel_case(snake_case_string):
+    components = snake_case_string.split("_")
+    return components[0] + "".join(x.title() for x in components[1:])
+
+
+class User(SCIMSchema):
     def __init__(
         self,
         *,
+        id: str,
         user_name: str,
         formatted: str = None,
         family_name: str = None,
@@ -507,10 +514,8 @@ class User(Schema):
         roles: List[str] = None,
         x509_certificates: List[str] = None,
     ):
-        self.id = "urn:ietf:params:scim:schemas:core:2.0:User"
-        self.name = "User"
-        self.description = "User Account"
-        self.endpoint = "/Users"
+        self.id = id
+        self.schemas = ["urn:ietf:params:scim:schemas:core:2.0:User"]
 
         self.user_name = user_name
         self.formatted = formatted
@@ -540,7 +545,12 @@ class User(Schema):
         self.x509_certificates = x509_certificates
 
     def json_encode(self):
-        return self.__dict__
+        jsonified = {}
+        for k, v in self.__dict__.items():
+            if v is None:
+                continue
+            jsonified[to_camel_case(k)] = v
+        return jsonified
 
 
 class Manager:
